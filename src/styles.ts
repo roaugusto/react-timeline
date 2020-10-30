@@ -61,10 +61,10 @@ export const SubtitleStyled = styled.div`
   }
 `;
 
-export const RowStyled = styled.div`
+export const RowStyled = styled.div<WidthProps>`
   display: flex;
   flex-direction: row;
-  width: 1200px;
+  width: ${(props) => `${props.width}px`};
 `;
 
 export const TimelineStyled = styled.div`

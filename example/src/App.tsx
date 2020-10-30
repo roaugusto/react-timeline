@@ -1,11 +1,11 @@
 import React from 'react'
 
-import Timeline, { ITask } from '@roaugusto/react-timeline'
+import Timeline, { ITask } from 'react-timeline'
 
 const dateBase = new Date(2020, 6, 15);
-const totPeriods = 8;
+const totPeriods = 6;
 const weeksPerPeriods = 1;
-const position: 'top' | 'bottom' | 'both' = 'both';
+const position: 'top' | 'bottom' | 'both' = 'bottom';
 const typeDraw: 'inline' | 'rising' = 'rising';
 // const labels = ['Concluído', 'Em Desenvolvimento', 'Não Iniciado'];
 

@@ -214,9 +214,11 @@ const Timeline: React.FC<ITimeline> = ({
   const listTasks1 = formatTask(tasks1);
   const listTasks2 = formatTask(tasks2);
 
+  const posTop = position === 'bottom' ? 0 : 90;
+
   const marginTop =
     typeDraw === 'inline'
-      ? 90
+      ? posTop
       : listTasks1.filter((item) => item.startDate !== '').length * 90;
 
   const widthContainer = totPeriods * 119 + 50;
@@ -232,7 +234,7 @@ const Timeline: React.FC<ITimeline> = ({
       </SubtitleStyled>
 
       <Content style={{ marginTop, maxWidth: widthContainer }}>
-        <RowStyled>
+        <RowStyled width={widthContainer}>
           {listTasks1.map((item, key) => {
             if (item.startDate !== '') {
               const pos = line * 90 + 60;
@@ -258,7 +260,7 @@ const Timeline: React.FC<ITimeline> = ({
             return <DayTaskEmpty key={key} width={widthDay} />;
           })}
         </RowStyled>
-        <RowStyled>
+        <RowStyled width={widthContainer}>
           <div style={{ position: 'relative' }}>
             <FirstMonthLabel>
               {format(datesBase[0], 'MMMM', { locale: currentLocale })}
@@ -299,7 +301,7 @@ const Timeline: React.FC<ITimeline> = ({
           {format(dateBase, 'dd/MM')}
         </DayEvolutionLabel>
 
-        <RowStyled>
+        <RowStyled width={widthContainer}>
           {listTasks2.map((item, key) => {
             if (item.startDate !== '') {
               const pos = line2 * 80 + 20;
