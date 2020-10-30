@@ -7,7 +7,8 @@
 ## Install
 
 ```bash
-npm install --save react-timeline
+npm install --save @roaugusto/react-timeline
+yarn add @roaugusto/react-timeline
 ```
 
 ## Examples
