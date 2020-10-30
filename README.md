@@ -1,4 +1,4 @@
-# react-timeline
+# @roaugusto/react-timeline
 
 > Timeline React Component
 
