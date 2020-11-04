@@ -57,7 +57,7 @@ export interface ITimeline {
   totPeriods: number;
   weeksPerPeriod: number;
   position: 'top' | 'bottom' | 'both';
-  tasks: ITask[];
+  tasks: ITask[] | undefined;
   typeDraw: 'inline' | 'rising';
   locale?: Locale;
   labels?: string[];
@@ -94,35 +94,37 @@ const Timeline: React.FC<ITimeline> = ({
   const tasks1: ITask[] = [];
   const tasks2: ITask[] = [];
 
-  switch (position) {
-    case 'both':
-      for (let i = 0; i < tasks.length; i++) {
-        if (i % 2 === 0) {
+  if (tasks !== undefined) {
+    switch (position) {
+      case 'both':
+        for (let i = 0; i < tasks.length; i++) {
+          if (i % 2 === 0) {
+            tasks1.push(tasks[i]);
+          } else {
+            tasks2.push(tasks[i]);
+          }
+        }
+        break;
+      case 'top':
+        for (let i = 0; i < tasks.length; i++) {
           tasks1.push(tasks[i]);
-        } else {
+        }
+        break;
+      case 'bottom':
+        for (let i = 0; i < tasks.length; i++) {
           tasks2.push(tasks[i]);
         }
-      }
-      break;
-    case 'top':
-      for (let i = 0; i < tasks.length; i++) {
-        tasks1.push(tasks[i]);
-      }
-      break;
-    case 'bottom':
-      for (let i = 0; i < tasks.length; i++) {
-        tasks2.push(tasks[i]);
-      }
-      break;
-    default:
-      for (let i = 0; i < tasks.length; i++) {
-        if (i % 2 === 0) {
-          tasks1.push(tasks[i]);
-        } else {
-          tasks2.push(tasks[i]);
+        break;
+      default:
+        for (let i = 0; i < tasks.length; i++) {
+          if (i % 2 === 0) {
+            tasks1.push(tasks[i]);
+          } else {
+            tasks2.push(tasks[i]);
+          }
         }
-      }
-      break;
+        break;
+    }
   }
 
   let date = firstDate;

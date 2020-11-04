@@ -60,7 +60,7 @@ const App = () => {
       typeDraw={typeDraw}
       // locale={ptBR}
       // labels={labels}
-      tasks={tasks}
+      tasks={undefined}
     />
   )
 
