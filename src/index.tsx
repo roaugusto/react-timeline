@@ -61,6 +61,7 @@ export interface ITimeline {
   typeDraw: 'inline' | 'rising';
   locale?: Locale;
   labels?: string[];
+  daysLabel?: string;
 }
 
 const Timeline: React.FC<ITimeline> = ({
@@ -72,6 +73,7 @@ const Timeline: React.FC<ITimeline> = ({
   typeDraw,
   locale,
   labels,
+  daysLabel,
 }) => {
   const currentLocale = locale || enUS;
   const currentLabels = labels || [
@@ -79,6 +81,8 @@ const Timeline: React.FC<ITimeline> = ({
     'Under Development',
     'Not Started',
   ];
+
+  const currentDaysLabel = daysLabel || 'days';
 
   const daysPerPeriods = weeksPerPeriod * 7;
   const widthDay = 17 / weeksPerPeriod;
@@ -256,6 +260,7 @@ const Timeline: React.FC<ITimeline> = ({
                   position={pos}
                   widthDay={widthDay}
                   taskPosition="top"
+                  daysLabel={currentDaysLabel}
                 />
               );
             }
@@ -323,6 +328,7 @@ const Timeline: React.FC<ITimeline> = ({
                   position={pos}
                   widthDay={widthDay}
                   taskPosition="bottom"
+                  daysLabel={currentDaysLabel}
                 />
               );
             }

@@ -11,6 +11,30 @@ npm install --save @roaugusto/react-timeline
 yarn add @roaugusto/react-timeline
 ```
 
+## Usage
+
+Componente React Timeline para visualização de atividades durante um determinado período.
+
+Dado uma data base, o componente calcula automaticamente um período para demonstrar as atividades.
+
+A barra de datas exibe um período de 7 dias,  demonstrando cada segunda-feira. Cada período pode ser incrementado de quantas semanas forem necessárias.
+
+Para o perído definido de 7 dias, o data início calculada é em média 30 dias antes. Para um perído de 14 dias (2 semanas), a data de início demonstrada é em média 60 dias e assim por diante.
+
+
+## Parameters
+
+| Parameter        | Type     |  Description                                                                                                |
+|------------------|----------|-------------------------------------------------------------------------------------------------------------|
+| dateBase         | Required | Base date used to demonstrate the period covered and to calculate the start date of the timeline.           |
+| totPeriods       | Required | Total periods to be displayed on the timeline.                                                              |
+| weeksPerPeriods  | Required | Total weeks served in a period.                                                                             |
+| position         | Required | Position that activities will be displayed. Options: top, bottom, both.                                     |
+| typeDraw         | Required | Type of display of activities, which can be increasing or on the same line. The options are: rising, inline.|
+| labels           | Optional | Names displayed in the legend. The default is: ['Finished', 'Under Development', 'Not Started']             |
+| daysLabel        | Optional | Label for the word "days". The default is "days".                                                           |
+| locale           | Optional | Internationalization to display the days of the months, imported from the date-fns/locale package. The default is {enUS} |
+
 ## Examples
 
 typeDraw = 'inline' / position = 'both'

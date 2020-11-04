@@ -23,6 +23,7 @@ interface TaskProps {
   widthBar: number;
   type: 'completed' | 'inprogress' | 'planned';
   taskPosition: 'top' | 'bottom';
+  daysLabel: string;
 }
 
 const Task: React.FC<TaskProps> = ({
@@ -36,6 +37,7 @@ const Task: React.FC<TaskProps> = ({
   widthBar,
   type,
   taskPosition,
+  daysLabel,
 }) => {
   return (
     <TaskContent width={widthDay}>
@@ -48,7 +50,7 @@ const Task: React.FC<TaskProps> = ({
         </DescDay>
 
         <DayBar type={type} width={widthDay * widthBar} text={qtyDays > 1}>
-          {qtyDays > 1 ? `${qtyDays} dias` : <span> </span>}
+          {qtyDays > 1 ? `${qtyDays} ${daysLabel}` : <span> </span>}
         </DayBar>
         <DescTask>
           {isAfter(parseISO(finishDate), dateBase) ? (
