@@ -13,14 +13,13 @@ yarn add @roaugusto/react-timeline
 
 ## Usage
 
-Componente React Timeline para visualização de atividades durante um determinado período.
+React Timeline component for viewing activities over a given period.
 
-Dado uma data base, o componente calcula automaticamente um período para demonstrar as atividades.
+Given a base date, the component automatically calculates a period to demonstrate activities.
 
-A barra de datas exibe um período de 7 dias,  demonstrando cada segunda-feira. Cada período pode ser incrementado de quantas semanas forem necessárias.
+The date bar displays a period of 7 days, showing each Monday. Each period can be extended as many weeks as necessary.
 
-Para o perído definido de 7 dias, o data início calculada é em média 30 dias antes. Para um perído de 14 dias (2 semanas), a data de início demonstrada é em média 60 dias e assim por diante.
-
+For the defined period of 7 days, the calculated start date is on average 30 days before. For a period of 14 days (2 weeks), the demonstrated start date is an average of 60 days and so on.
 
 ## Parameters
 
