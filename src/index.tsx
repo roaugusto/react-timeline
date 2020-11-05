@@ -220,6 +220,9 @@ const Timeline: React.FC<ITimeline> = ({
   const listTasks1 = formatTask(tasks1);
   const listTasks2 = formatTask(tasks2);
 
+  // console.log('listTasks1', listTasks1);
+  // console.log('listTasks2', listTasks2);
+
   const posTop = position === 'bottom' ? 0 : 90;
 
   const marginTop =
@@ -268,11 +271,14 @@ const Timeline: React.FC<ITimeline> = ({
           })}
         </RowStyled>
         <RowStyled width={widthContainer}>
-          <div style={{ position: 'relative' }}>
-            <FirstMonthLabel>
-              {format(datesBase[0], 'MMMM', { locale: currentLocale })}
-            </FirstMonthLabel>
-          </div>
+          {datesBase[0].getDate() !== 1 && (
+            <div style={{ position: 'relative' }}>
+              <FirstMonthLabel>
+                {format(datesBase[0], 'MMMM', { locale: currentLocale })}
+              </FirstMonthLabel>
+            </div>
+          )}
+
           {rangeDates.map((item, key) => {
             if (item.getDate() === 1) {
               return (

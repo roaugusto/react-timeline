@@ -2,51 +2,38 @@ import React from 'react'
 
 import Timeline, { ITask } from 'react-timeline'
 
-const dateBase = new Date(2020, 6, 15);
-const totPeriods = 6;
-const weeksPerPeriods = 1;
-const position: 'top' | 'bottom' | 'both' = 'bottom';
-const typeDraw: 'inline' | 'rising' = 'rising';
+const dateBase = new Date(2020, 9, 31);
+const totPeriods = 9;
+const weeksPerPeriods = 2;
+const position: 'top' | 'bottom' | 'both' = 'both';
+const typeDraw: 'inline' | 'rising' = 'inline';
 // const labels = ['Concluído', 'Em Desenvolvimento', 'Não Iniciado'];
 
 export const tasks: ITask[] = [
   {
-    id: '1',
-    startDate: '2020-06-29',
-    finishDate: '2020-06-29',
-    description: 'Lorem ipsum dolor sit amet, consectetur',
+    id: "1",
+    startDate: "2020-10-19",
+    finishDate: "2020-11-02",
+    description: "Sprint 1"
   },
   {
-    id: '2',
-    startDate: '2020-07-01',
-    finishDate: '2020-08-10',
-    description: 'Excepteur sint occaecat',
+    id: "2",
+    startDate: "2020-11-02",
+    finishDate: "2020-11-15",
+    description: "Sprint 2"
   },
   {
-    id: '3',
-    startDate: '2020-07-10',
-    finishDate: '2020-07-10',
-    description: 'Duis aute irure dolor',
+    id: "3",
+    startDate: "2020-11-16",
+    finishDate: "2020-11-29",
+    description: "Sprint 3"
   },
   {
-    id: '4',
-    startDate: '2020-07-06',
-    finishDate: '2020-07-15',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  },
-  {
-    id: '5',
-    startDate: '2020-07-20',
-    finishDate: '2020-07-24',
-    description: 'Sed ut perspiciatis unde omnis iste natus error',
-  },
-  {
-    id: '6',
-    startDate: '2020-08-10',
-    finishDate: '2020-08-13',
-    description: 'Nemo enim ipsam voluptate',
-  },
-
+    id: "4",
+    startDate: "2020-11-30",
+    finishDate: "2020-12-13",
+    description: "Sprint 4"
+  }
 ];
 
 
