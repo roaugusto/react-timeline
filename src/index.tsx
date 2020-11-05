@@ -230,7 +230,7 @@ const Timeline: React.FC<ITimeline> = ({
       ? posTop
       : listTasks1.filter((item) => item.startDate !== '').length * 90;
 
-  const widthContainer = totPeriods * 119 + 50;
+  const widthContainer = totPeriods * 119 + 150;
 
   return (
     <Container>

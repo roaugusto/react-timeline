@@ -4,7 +4,7 @@ import Timeline, { ITask } from 'react-timeline'
 
 const dateBase = new Date(2020, 9, 31);
 const totPeriods = 9;
-const weeksPerPeriods = 2;
+const weeksPerPeriods = 1;
 const position: 'top' | 'bottom' | 'both' = 'both';
 const typeDraw: 'inline' | 'rising' = 'inline';
 // const labels = ['Concluído', 'Em Desenvolvimento', 'Não Iniciado'];
