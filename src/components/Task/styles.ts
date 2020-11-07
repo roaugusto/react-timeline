@@ -21,6 +21,10 @@ interface WidthProps {
   width: number;
 }
 
+interface DescriptionProps {
+  backgroundColor?: string;
+}
+
 const marginColorsVariations = {
   completed: css`
     border-color: ${defaultTheme.colors.completed};
@@ -49,15 +53,15 @@ export const MarginDay = styled.div<MarginProps>`
   position: absolute;
   border-left: 1px solid;
   height: ${(props) => `${props.position + 10}px`};
-  margin-left: 7px;
+  margin-left: 3px;
 
   ${(props) => marginColorsVariations[props.type || 'planned']}
 
   ${(props) =>
     props.taskPosition === 'top' &&
     css`
-      margin-top: -${props.position - 50}px;
-      height: ${props.position + 10}px;
+      margin-top: -${props.position - 45}px;
+      height: ${props.position + 15}px;
     `}
 
   ${(props) =>
@@ -70,7 +74,7 @@ export const MarginDay = styled.div<MarginProps>`
 
 export const DayTask = styled.div<DayTaskProps>`
   position: absolute;
-  margin-left: 10px;
+  margin-left: 6px;
   color: ${defaultTheme.colors.timeline};
   width: max-content;
   font-size: 14px;
@@ -113,14 +117,25 @@ export const DayBar = styled.div<DayBarProps>`
     `}
 `;
 
-export const DescDay = styled.div`
+export const DescDay = styled.div<DescriptionProps>`
+  background: ${defaultTheme.colors.background};
   color: ${defaultTheme.colors.timeline};
   font-size: 12px;
   margin-bottom: 5px;
   margin-left: 5px;
+
+  position: relative;
+  z-index: 999;
+  width: max-content;
+
+  ${(props) =>
+    props.backgroundColor &&
+    css`
+      background: ${props.backgroundColor};
+    `}
 `;
 
-export const DescTask = styled.div`
+export const DescTask = styled.div<DescriptionProps>`
   background: ${defaultTheme.colors.background};
   position: relative;
   z-index: 999;
@@ -132,9 +147,16 @@ export const DescTask = styled.div`
   svg {
     margin-right: 5px;
   }
+
+  ${(props) =>
+    props.backgroundColor &&
+    css`
+      background: ${props.backgroundColor};
+    `}
 `;
 
 export const TaskContent = styled.div<WidthProps>`
   position: relative;
   width: ${(props) => `${props.width}px`};
+  /* margin-left: -2px; */
 `;

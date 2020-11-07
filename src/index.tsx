@@ -13,6 +13,7 @@ import {
 
 import { enUS } from 'date-fns/locale';
 import { Locale } from 'date-fns';
+import { defaultTheme } from './styles/theme';
 import GlobalStyle from './styles/global';
 
 import {
@@ -35,6 +36,11 @@ import {
 
 import Task from './components/Task';
 
+export interface IPositionTask {
+  line: number;
+  nextDate: Date;
+}
+
 export interface ITask {
   id: string;
   startDate: string;
@@ -50,6 +56,7 @@ interface ITaskFormatted {
   qtyDays: number;
   widthBar: number;
   type: 'completed' | 'inprogress' | 'planned';
+  position: number;
 }
 
 export interface ITimeline {
@@ -62,6 +69,7 @@ export interface ITimeline {
   locale?: Locale;
   labels?: string[];
   daysLabel?: string;
+  backgroundColor?: string;
 }
 
 const Timeline: React.FC<ITimeline> = ({
@@ -74,6 +82,7 @@ const Timeline: React.FC<ITimeline> = ({
   locale,
   labels,
   daysLabel,
+  backgroundColor,
 }) => {
   const currentLocale = locale || enUS;
   const currentLabels = labels || [
@@ -83,14 +92,13 @@ const Timeline: React.FC<ITimeline> = ({
   ];
 
   const currentDaysLabel = daysLabel || 'days';
+  const background = backgroundColor || defaultTheme.colors.background;
 
   const daysPerPeriods = weeksPerPeriod * 7;
   const widthDay = 17 / weeksPerPeriod;
 
   const firstMon = addDays(startOfWeek(dateBase), 1);
   const firstDate = subDays(startOfWeek(firstMon), 27 * weeksPerPeriod);
-  let line = 0;
-  let line2 = 0;
 
   const datesBase: Date[] = [];
   const rangeDates: Date[] = [];
@@ -158,8 +166,18 @@ const Timeline: React.FC<ITimeline> = ({
     return addDays(firstDate, qtyDays);
   };
 
-  const formatTask = (listTasks: ITask[]): ITaskFormatted[] => {
+  const formatTask = (
+    listTasks: ITask[],
+    positionTask: string,
+  ): ITaskFormatted[] => {
     const listTaskFormatted: ITaskFormatted[] = [];
+    const heigh = positionTask === 'top' ? 90 : 80;
+    const spaceInitial = positionTask === 'top' ? 60 : 20;
+
+    const positionsTasks: IPositionTask[] = [];
+
+    let line = 0;
+    let pos = 0;
     for (let i = 1; i < diffTotal; i++) {
       const processDate = nextDate(i - 1);
       const selectedTask = listTasks.find((item) =>
@@ -192,6 +210,48 @@ const Timeline: React.FC<ITimeline> = ({
           type = 'inprogress';
         }
 
+        if (typeDraw === 'inline') {
+          const lenDesc = Math.ceil(
+            (selectedTask.description.length * 7) / widthDay,
+          );
+          const lenNext = lenDesc > widthBar ? lenDesc : widthBar;
+          if (positionsTasks.length === 0) {
+            line = 0;
+            positionsTasks.push({
+              line,
+              nextDate: addDays(parseISO(selectedTask.startDate), lenNext),
+            });
+          } else {
+            const totPositions = positionsTasks.length;
+            let found = false;
+            for (let j = 0; j < totPositions; j++) {
+              const item = positionsTasks[j];
+              if (isAfter(parseISO(selectedTask.startDate), item.nextDate)) {
+                line = item.line;
+                positionsTasks[j].nextDate = addDays(
+                  parseISO(selectedTask.startDate),
+                  lenNext,
+                );
+                j = positionsTasks.length + 1;
+                found = true;
+              }
+            }
+            if (!found) {
+              line++;
+              positionsTasks.push({
+                line,
+                nextDate: addDays(parseISO(selectedTask.startDate), lenNext),
+              });
+            }
+          }
+          pos = line * heigh + spaceInitial;
+        } else {
+          pos = line * heigh + spaceInitial;
+          line++;
+        }
+        // const pos = line * heigh + spaceInitial;
+        // line = typeDraw === 'rising' ? line + 1 : 0;
+
         listTaskFormatted.push({
           id: i.toString(),
           startDate: selectedTask.startDate,
@@ -200,6 +260,7 @@ const Timeline: React.FC<ITimeline> = ({
           qtyDays,
           widthBar,
           type,
+          position: pos,
         });
       } else {
         listTaskFormatted.push({
@@ -210,30 +271,41 @@ const Timeline: React.FC<ITimeline> = ({
           qtyDays: 0,
           widthBar: 0,
           type: 'planned',
+          position: 0,
         });
       }
     }
 
+    // console.log('listTaskFormatted', listTaskFormatted);
+    // console.log('positionsTasks', positionsTasks);
     return listTaskFormatted;
   };
 
-  const listTasks1 = formatTask(tasks1);
-  const listTasks2 = formatTask(tasks2);
+  const listTasks1 = formatTask(tasks1, 'top');
+  const listTasks2 = formatTask(tasks2, 'bottom');
 
   // console.log('listTasks1', listTasks1);
   // console.log('listTasks2', listTasks2);
 
-  const posTop = position === 'bottom' ? 0 : 90;
+  const maxTopPosition = listTasks1.reduce<number>(
+    (tot, item) => (item.position > tot ? item.position : tot),
+    0,
+  );
 
-  const marginTop =
-    typeDraw === 'inline'
-      ? posTop
-      : listTasks1.filter((item) => item.startDate !== '').length * 90;
+  const maxBottomPosition = listTasks2.reduce<number>(
+    (tot, item) => (item.position > tot ? item.position : tot),
+    0,
+  );
+
+  const spacesDraw = position === 'top' ? 250 : 300;
+  const totalHeigh = maxTopPosition + maxBottomPosition + spacesDraw;
+
+  const marginTop = maxTopPosition + 30;
 
   const widthContainer = totPeriods * 119 + 150;
 
   return (
-    <Container>
+    <Container style={{ height: totalHeigh, backgroundColor: background }}>
       <SubtitleStyled style={{ maxWidth: widthContainer }}>
         {currentLabels.map((item, key) => (
           <Fragment key={key}>
@@ -246,10 +318,6 @@ const Timeline: React.FC<ITimeline> = ({
         <RowStyled width={widthContainer}>
           {listTasks1.map((item, key) => {
             if (item.startDate !== '') {
-              const pos = line * 90 + 60;
-              if (typeDraw === 'rising') {
-                line++;
-              }
               return (
                 <Task
                   key={key}
@@ -260,10 +328,11 @@ const Timeline: React.FC<ITimeline> = ({
                   widthBar={item.widthBar}
                   qtyDays={item.qtyDays}
                   type={item.type}
-                  position={pos}
+                  position={item.position}
                   widthDay={widthDay}
                   taskPosition="top"
                   daysLabel={currentDaysLabel}
+                  backgroundColor={backgroundColor}
                 />
               );
             }
@@ -317,10 +386,6 @@ const Timeline: React.FC<ITimeline> = ({
         <RowStyled width={widthContainer}>
           {listTasks2.map((item, key) => {
             if (item.startDate !== '') {
-              const pos = line2 * 80 + 20;
-              if (typeDraw === 'rising') {
-                line2++;
-              }
               return (
                 <Task
                   key={key}
@@ -331,10 +396,11 @@ const Timeline: React.FC<ITimeline> = ({
                   widthBar={item.widthBar}
                   qtyDays={item.qtyDays}
                   type={item.type}
-                  position={pos}
+                  position={item.position}
                   widthDay={widthDay}
                   taskPosition="bottom"
                   daysLabel={currentDaysLabel}
+                  backgroundColor={backgroundColor}
                 />
               );
             }

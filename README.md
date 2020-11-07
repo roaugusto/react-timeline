@@ -30,9 +30,10 @@ For the defined period of 7 days, the calculated start date is on average 30 day
 | weeksPerPeriods  | Required | Total weeks served in a period.                                                                             |
 | position         | Required | Position that activities will be displayed. Options: top, bottom, both.                                     |
 | typeDraw         | Required | Type of display of activities, which can be increasing or on the same line. The options are: rising, inline.|
-| labels           | Optional | Names displayed in the legend. The default is: ['Finished', 'Under Development', 'Not Started']             |
-| daysLabel        | Optional | Label for the word "days". The default is "days".                                                           |
-| locale           | Optional | Internationalization to display the days of the months, imported from the date-fns/locale package. The default is {enUS} |
+| labels           | Optional | Names displayed in the legend. Default is: ['Finished', 'Under Development', 'Not Started']                 |
+| daysLabel        | Optional | Label for the word "days". Default is "days".                                                               |
+| locale           | Optional | Internationalization to display the days of the months, imported from the date-fns/locale package. Default is {enUS} |
+| backgroundColor  | Optional | Background color. Default is: '#f0f0f5' |
 
 ## Examples
 
@@ -52,6 +53,9 @@ typeDraw = 'rising'/ position = 'both'
 
 ![alt text](https://github.com/roaugusto/react-timeline/blob/main/assets/imgs/timeline7.png?raw=true)
 
+typeDraw = 'inline'/ position = 'both'
+
+![alt text](https://github.com/roaugusto/react-timeline/blob/main/assets/imgs/timeline8.png?raw=true)
 
 ## Usage
 

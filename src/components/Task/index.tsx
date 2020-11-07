@@ -24,6 +24,7 @@ interface TaskProps {
   type: 'completed' | 'inprogress' | 'planned';
   taskPosition: 'top' | 'bottom';
   daysLabel: string;
+  backgroundColor?: string;
 }
 
 const Task: React.FC<TaskProps> = ({
@@ -38,11 +39,12 @@ const Task: React.FC<TaskProps> = ({
   type,
   taskPosition,
   daysLabel,
+  backgroundColor,
 }) => {
   return (
     <TaskContent width={widthDay}>
       <DayTask position={position} taskPosition={taskPosition}>
-        <DescDay>
+        <DescDay backgroundColor={backgroundColor}>
           {qtyDays > 1
             ? `${format(parseISO(startDate), 'dd/MM')} -
               ${format(parseISO(finishDate), 'dd/MM')}`
@@ -52,7 +54,7 @@ const Task: React.FC<TaskProps> = ({
         <DayBar type={type} width={widthDay * widthBar} text={qtyDays > 1}>
           {qtyDays > 1 ? `${qtyDays} ${daysLabel}` : <span> </span>}
         </DayBar>
-        <DescTask>
+        <DescTask backgroundColor={backgroundColor}>
           {isAfter(parseISO(finishDate), dateBase) ? (
             <GoPrimitiveDot />
           ) : (

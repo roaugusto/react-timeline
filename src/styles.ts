@@ -52,7 +52,7 @@ export const SubtitleStyled = styled.div`
   flex-direction: row;
   color: #737373;
   margin: auto auto;
-  margin-top: 10px;
+  padding-top: 10px;
   align-items: center;
 
   div {
