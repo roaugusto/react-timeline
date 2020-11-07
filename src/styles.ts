@@ -16,6 +16,7 @@ interface SquareProps {
 export const Container = styled.div`
   display: block;
   margin: auto auto;
+  padding: 10px;
 `;
 
 export const Content = styled.div`
