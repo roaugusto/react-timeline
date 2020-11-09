@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import {
   startOfWeek,
@@ -30,7 +30,6 @@ import {
   DayEvolutionLabel,
   DayLabel,
   FirstMonthLabel,
-  DayTaskEmpty,
   RowStyled,
 } from './styles';
 
@@ -57,6 +56,7 @@ interface ITaskFormatted {
   widthBar: number;
   type: 'completed' | 'inprogress' | 'planned';
   position: number;
+  daysFromStart: number;
 }
 
 export interface ITimeline {
@@ -113,7 +113,7 @@ const Timeline: React.FC<ITimeline> = ({
     listTasks2: [] as ITaskFormatted[],
   });
 
-  const updateTimeline = useCallback((lstTasks: ITask[] | undefined) => {
+  const updateTimeline = (lstTasks: ITask[] | undefined): void => {
     const tasks1: ITask[] = [];
     const tasks2: ITask[] = [];
 
@@ -158,13 +158,11 @@ const Timeline: React.FC<ITimeline> = ({
       datesBase.push(newDate);
       date = newDate;
     }
-    // console.log('datesBase', datesBase);
 
     const diff = differenceInDays(dateBase, firstDate);
 
     const lastDate = addDays(datesBase[datesBase.length - 1], daysPerPeriods);
     const lastDrawingDate = addDays(lastDate, 4);
-    // console.log('lastDate', lastDate);
     const diffTotal = differenceInDays(lastDate, firstDate) + 1;
 
     let newDate = firstDate;
@@ -191,11 +189,18 @@ const Timeline: React.FC<ITimeline> = ({
 
       let line = 0;
       let pos = 0;
-      for (let i = 1; i < diffTotal; i++) {
+      let i = 1;
+      const list: ITask[] = listTasks;
+
+      while (i < diffTotal) {
         const processDate = nextDate(i - 1);
-        const selectedTask = listTasks.find((item) =>
+        const selectedTask = list.find((item) =>
           isEqual(parseISO(item.startDate), processDate),
         );
+        const findIndex = list.findIndex((item) =>
+          isEqual(parseISO(item.startDate), processDate),
+        );
+
         if (selectedTask) {
           const qtyDays =
             differenceInDays(
@@ -228,7 +233,7 @@ const Timeline: React.FC<ITimeline> = ({
 
           if (typeDraw === 'inline') {
             const lenDesc = Math.ceil(
-              (selectedTask.description.length * 7) / widthDay,
+              (selectedTask.description.length * 8) / widthDay,
             );
             const lenNext = lenDesc > widthBar ? lenDesc : widthBar;
             if (positionsTasks.length === 0) {
@@ -253,7 +258,7 @@ const Timeline: React.FC<ITimeline> = ({
                 }
               }
               if (!found) {
-                line++;
+                line = positionsTasks.length;
                 positionsTasks.push({
                   line,
                   nextDate: addDays(parseISO(selectedTask.startDate), lenNext),
@@ -265,8 +270,6 @@ const Timeline: React.FC<ITimeline> = ({
             pos = line * heigh + spaceInitial;
             line++;
           }
-          // const pos = line * heigh + spaceInitial;
-          // line = typeDraw === 'rising' ? line + 1 : 0;
 
           listTaskFormatted.push({
             id: i.toString(),
@@ -277,30 +280,22 @@ const Timeline: React.FC<ITimeline> = ({
             widthBar,
             type,
             position: pos,
+            daysFromStart: differenceInDays(
+              parseISO(selectedTask.startDate),
+              firstDate,
+            ),
           });
+          list.splice(findIndex, 1);
         } else {
-          listTaskFormatted.push({
-            id: i.toString(),
-            startDate: '',
-            finishDate: '',
-            description: '',
-            qtyDays: 0,
-            widthBar: 0,
-            type: 'planned',
-            position: 0,
-          });
+          i++;
         }
       }
 
-      // console.log('listTaskFormatted', listTaskFormatted);
-      // console.log('positionsTasks', positionsTasks);
       return listTaskFormatted;
     };
 
-    const listTasks1 = formatTask(tasks1, 'top');
-    const listTasks2 = formatTask(tasks2, 'bottom');
-    // console.log('listTasks1', listTasks1);
-    // console.log('listTasks2', listTasks2);
+    const listTasks1 = tasks1.length > 0 ? formatTask(tasks1, 'top') : [];
+    const listTasks2 = tasks2.length > 0 ? formatTask(tasks2, 'bottom') : [];
 
     const maxTopPosition = listTasks1.reduce<number>(
       (tot, item) => (item.position > tot ? item.position : tot),
@@ -326,11 +321,11 @@ const Timeline: React.FC<ITimeline> = ({
       listTasks1,
       listTasks2,
     });
-  }, []);
+  };
 
   useEffect(() => {
     updateTimeline(tasks);
-  }, [tasks, updateTimeline]);
+  }, [tasks]);
 
   return (
     <Container
@@ -352,26 +347,24 @@ const Timeline: React.FC<ITimeline> = ({
       >
         <RowStyled width={dataTimeline.widthContainer}>
           {dataTimeline.listTasks1.map((item, key) => {
-            if (item.startDate !== '') {
-              return (
-                <Task
-                  key={key}
-                  dateBase={dateBase}
-                  startDate={item.startDate}
-                  finishDate={item.finishDate}
-                  description={item.description}
-                  widthBar={item.widthBar}
-                  qtyDays={item.qtyDays}
-                  type={item.type}
-                  position={item.position}
-                  widthDay={widthDay}
-                  taskPosition="top"
-                  daysLabel={currentDaysLabel}
-                  backgroundColor={backgroundColor}
-                />
-              );
-            }
-            return <DayTaskEmpty key={key} width={widthDay} />;
+            return (
+              <Task
+                key={key}
+                dateBase={dateBase}
+                startDate={item.startDate}
+                finishDate={item.finishDate}
+                description={item.description}
+                widthBar={item.widthBar}
+                qtyDays={item.qtyDays}
+                type={item.type}
+                position={item.position}
+                widthDay={widthDay}
+                taskPosition="top"
+                daysLabel={currentDaysLabel}
+                backgroundColor={backgroundColor}
+                daysFromStart={item.daysFromStart}
+              />
+            );
           })}
         </RowStyled>
         <RowStyled width={dataTimeline.widthContainer}>
@@ -417,32 +410,33 @@ const Timeline: React.FC<ITimeline> = ({
           ))}
           <DayEvolution width={dataTimeline.totEvol} />
         </TimelineStyled>
-        <DayEvolutionLabel width={dataTimeline.totEvol}>
-          {format(dateBase, 'dd/MM')}
+        <DayEvolutionLabel
+          width={dataTimeline.totEvol}
+          backgroundColor={backgroundColor}
+        >
+          <div>{format(dateBase, 'dd/MM')}</div>
         </DayEvolutionLabel>
 
         <RowStyled width={dataTimeline.widthContainer}>
           {dataTimeline.listTasks2.map((item, key) => {
-            if (item.startDate !== '') {
-              return (
-                <Task
-                  key={key}
-                  dateBase={dateBase}
-                  startDate={item.startDate}
-                  finishDate={item.finishDate}
-                  description={item.description}
-                  widthBar={item.widthBar}
-                  qtyDays={item.qtyDays}
-                  type={item.type}
-                  position={item.position}
-                  widthDay={widthDay}
-                  taskPosition="bottom"
-                  daysLabel={currentDaysLabel}
-                  backgroundColor={backgroundColor}
-                />
-              );
-            }
-            return <DayTaskEmpty key={key} width={widthDay} />;
+            return (
+              <Task
+                key={key}
+                dateBase={dateBase}
+                startDate={item.startDate}
+                finishDate={item.finishDate}
+                description={item.description}
+                widthBar={item.widthBar}
+                qtyDays={item.qtyDays}
+                type={item.type}
+                position={item.position}
+                widthDay={widthDay}
+                taskPosition="bottom"
+                daysLabel={currentDaysLabel}
+                backgroundColor={backgroundColor}
+                daysFromStart={item.daysFromStart}
+              />
+            );
           })}
         </RowStyled>
       </Content>

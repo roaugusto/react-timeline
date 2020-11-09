@@ -19,6 +19,7 @@ interface MarginProps {
 
 interface WidthProps {
   width: number;
+  daysFromStart: number;
 }
 
 interface DescriptionProps {
@@ -156,7 +157,9 @@ export const DescTask = styled.div<DescriptionProps>`
 `;
 
 export const TaskContent = styled.div<WidthProps>`
-  position: relative;
+  /* position: relative; */
+  position: absolute;
+  margin-left: ${(props) => `${props.daysFromStart * props.width}px`};
   width: ${(props) => `${props.width}px`};
   /* margin-left: -2px; */
 `;

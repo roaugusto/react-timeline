@@ -25,6 +25,7 @@ interface TaskProps {
   taskPosition: 'top' | 'bottom';
   daysLabel: string;
   backgroundColor?: string;
+  daysFromStart: number;
 }
 
 const Task: React.FC<TaskProps> = ({
@@ -40,9 +41,10 @@ const Task: React.FC<TaskProps> = ({
   taskPosition,
   daysLabel,
   backgroundColor,
+  daysFromStart,
 }) => {
   return (
-    <TaskContent width={widthDay}>
+    <TaskContent width={widthDay} daysFromStart={daysFromStart}>
       <DayTask position={position} taskPosition={taskPosition}>
         <DescDay backgroundColor={backgroundColor}>
           {qtyDays > 1

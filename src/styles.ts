@@ -3,6 +3,7 @@ import { defaultTheme } from './styles/theme';
 
 interface DayEvolutionProps {
   width: string;
+  backgroundColor?: string;
 }
 
 interface WidthProps {
@@ -129,6 +130,19 @@ export const DayEvolution = styled.div<DayEvolutionProps>`
 `;
 
 export const DayEvolutionLabel = styled.div<DayEvolutionProps>`
+  div {
+    background: ${defaultTheme.colors.background};
+    position: relative;
+    z-index: 999;
+    width: max-content;
+
+    ${(props) =>
+      props.backgroundColor &&
+      css`
+        background: ${props.backgroundColor};
+      `}
+  }
+
   display: flex;
   justify-content: flex-end;
   color: #737373;
