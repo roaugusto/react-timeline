@@ -123,3 +123,23 @@ export const tasks3: ITask[] = [
   }
 ]
 
+export const tasks4: ITask[] = [
+  {
+    id: '1',
+    startDate: '2020-07-10',
+    finishDate: '2020-07-15',
+    description: 'Lorem ipsum dolor sit amet, consectetur',
+  },
+  {
+    id: '2',
+    startDate: '2020-07-10',
+    finishDate: '2020-07-15',
+    description: 'Excepteur sint occaecat',
+  },
+  {
+    id: '3',
+    startDate: '2020-07-10',
+    finishDate: '2020-07-15',
+    description: 'Duis aute irure dolor',
+  }
+];
