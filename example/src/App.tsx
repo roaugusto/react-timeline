@@ -34,7 +34,7 @@ const App = () => {
       id: newId.toString(),
       startDate: format(date1, 'yyyy-MM-dd'),
       finishDate: format(date2, 'yyyy-MM-dd'),
-      description: `Nova tarefa ${newId}`,
+      description: `New task ${newId}`,
     };
     setListTasks((state) => [...state, newTask]);
   };

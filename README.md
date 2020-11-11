@@ -11,6 +11,10 @@ npm install --save @roaugusto/react-timeline
 yarn add @roaugusto/react-timeline
 ```
 
+## Test here
+
+https://codesandbox.io/s/react-timeline-y75fo
+
 ## Usage
 
 React Timeline component for viewing activities over a given period.
