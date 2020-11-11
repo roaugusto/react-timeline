@@ -6,6 +6,10 @@ interface DayEvolutionProps {
   backgroundColor?: string;
 }
 
+interface MonthLabelProps {
+  backgroundColor?: string;
+}
+
 interface WidthProps {
   width: number;
 }
@@ -153,7 +157,20 @@ export const DayEvolutionLabel = styled.div<DayEvolutionProps>`
   font-weight: bold;
 `;
 
-export const FirstMonthLabel = styled.div`
+export const FirstMonthLabel = styled.div<MonthLabelProps>`
+  div {
+    background: ${defaultTheme.colors.background};
+    position: relative;
+    z-index: 999;
+    width: max-content;
+
+    ${(props) =>
+      props.backgroundColor &&
+      css`
+        background: ${props.backgroundColor};
+      `}
+  }
+
   position: absolute;
   margin-bottom: 10px;
   margin-left: -45px;
@@ -165,7 +182,20 @@ export const FirstMonthLabel = styled.div`
   bottom: 5px;
 `;
 
-export const MonthLabel = styled.div`
+export const MonthLabel = styled.div<MonthLabelProps>`
+  div {
+    background: ${defaultTheme.colors.background};
+    position: relative;
+    z-index: 999;
+    width: max-content;
+
+    ${(props) =>
+      props.backgroundColor &&
+      css`
+        background: ${props.backgroundColor};
+      `}
+  }
+
   position: absolute;
   margin-bottom: 10px;
   margin-left: 10px;

@@ -91,15 +91,6 @@ const Timeline: React.FC<ITimeline> = ({
     'Not Started',
   ];
 
-  const currentDaysLabel = daysLabel || 'days';
-  const background = backgroundColor || defaultTheme.colors.background;
-
-  const daysPerPeriods = weeksPerPeriod * 7;
-  const widthDay = 17 / weeksPerPeriod;
-
-  const firstMon = addDays(startOfWeek(dateBase), 1);
-  const firstDate = subDays(startOfWeek(firstMon), 27 * weeksPerPeriod);
-
   const [dataTimeline, setDataTimeline] = useState({
     datesBase: [] as Date[],
     rangeDates: [] as Date[],
@@ -111,11 +102,24 @@ const Timeline: React.FC<ITimeline> = ({
     marginTop: 0,
     listTasks1: [] as ITaskFormatted[],
     listTasks2: [] as ITaskFormatted[],
+    daysPerPeriods: 7,
+    widthDay: 17,
+    currentDaysLabel: 'days',
+    background: defaultTheme.colors.background,
   });
 
   const updateTimeline = (lstTasks: ITask[] | undefined): void => {
     const tasks1: ITask[] = [];
     const tasks2: ITask[] = [];
+
+    const currentDaysLabel = daysLabel || 'days';
+    const background = backgroundColor || defaultTheme.colors.background;
+
+    const daysPerPeriods = weeksPerPeriod * 7;
+    const widthDay = 17 / weeksPerPeriod;
+
+    const firstMon = addDays(startOfWeek(dateBase), 1);
+    const firstDate = subDays(startOfWeek(firstMon), 27 * weeksPerPeriod);
 
     if (lstTasks !== undefined) {
       switch (position) {
@@ -320,16 +324,31 @@ const Timeline: React.FC<ITimeline> = ({
       marginTop: maxTopPosition + 30,
       listTasks1,
       listTasks2,
+      daysPerPeriods,
+      widthDay,
+      currentDaysLabel,
+      background,
     });
   };
 
   useEffect(() => {
     updateTimeline(tasks);
-  }, [tasks]);
+  }, [
+    tasks,
+    dateBase,
+    totPeriods,
+    weeksPerPeriod,
+    backgroundColor,
+    position,
+    typeDraw,
+  ]);
 
   return (
     <Container
-      style={{ height: dataTimeline.totalHeigh, backgroundColor: background }}
+      style={{
+        height: dataTimeline.totalHeigh,
+        backgroundColor: dataTimeline.background,
+      }}
     >
       <SubtitleStyled style={{ maxWidth: dataTimeline.widthContainer }}>
         {currentLabels.map((item, key) => (
@@ -358,10 +377,10 @@ const Timeline: React.FC<ITimeline> = ({
                 qtyDays={item.qtyDays}
                 type={item.type}
                 position={item.position}
-                widthDay={widthDay}
+                widthDay={dataTimeline.widthDay}
                 taskPosition="top"
-                daysLabel={currentDaysLabel}
-                backgroundColor={backgroundColor}
+                daysLabel={dataTimeline.currentDaysLabel}
+                backgroundColor={dataTimeline.background}
                 daysFromStart={item.daysFromStart}
               />
             );
@@ -371,10 +390,12 @@ const Timeline: React.FC<ITimeline> = ({
           {dataTimeline.datesBase.length > 0 &&
             dataTimeline.datesBase[0].getDate() !== 1 && (
               <div style={{ position: 'relative' }}>
-                <FirstMonthLabel>
-                  {format(dataTimeline.datesBase[0], 'MMMM', {
-                    locale: currentLocale,
-                  })}
+                <FirstMonthLabel backgroundColor={backgroundColor}>
+                  <div>
+                    {format(dataTimeline.datesBase[0], 'MMMM', {
+                      locale: currentLocale,
+                    })}
+                  </div>
                 </FirstMonthLabel>
               </div>
             )}
@@ -384,16 +405,16 @@ const Timeline: React.FC<ITimeline> = ({
               return (
                 <div
                   key={key}
-                  style={{ position: 'relative', width: widthDay }}
+                  style={{ position: 'relative', width: dataTimeline.widthDay }}
                 >
                   <MarginMonth />
-                  <MonthLabel>
-                    {format(item, 'MMMM', { locale: currentLocale })}
+                  <MonthLabel backgroundColor={backgroundColor}>
+                    <div>{format(item, 'MMMM', { locale: currentLocale })}</div>
                   </MonthLabel>
                 </div>
               );
             }
-            return <DayLabel key={key} width={widthDay} />;
+            return <DayLabel key={key} width={dataTimeline.widthDay} />;
           })}
         </RowStyled>
 
@@ -430,10 +451,10 @@ const Timeline: React.FC<ITimeline> = ({
                 qtyDays={item.qtyDays}
                 type={item.type}
                 position={item.position}
-                widthDay={widthDay}
+                widthDay={dataTimeline.widthDay}
                 taskPosition="bottom"
-                daysLabel={currentDaysLabel}
-                backgroundColor={backgroundColor}
+                daysLabel={dataTimeline.currentDaysLabel}
+                backgroundColor={dataTimeline.background}
                 daysFromStart={item.daysFromStart}
               />
             );
