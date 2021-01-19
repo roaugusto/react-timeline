@@ -421,7 +421,7 @@ const Timeline: React.FC<ITimeline> = ({
         <TimelineStyled>
           {dataTimeline.datesBase.map((item, key) => (
             <div
-              key={item.getDate()}
+              key={key}
               style={{ display: 'flex', flexDirection: 'row', zIndex: 999 }}
             >
               <ItemDiv> {key !== 0 && '|'} </ItemDiv>
